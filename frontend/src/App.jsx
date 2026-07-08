@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -9,14 +9,12 @@ import {
   selectHcp,
 } from './features/interactionSlice.js';
 
-const now = new Date();
-
 const initialForm = {
   rep_name: 'Amruta Rep',
-  hcp_name: 'Dr. Smith',
+  hcp_name: '',
   interaction_type: 'Meeting',
-  interaction_date: now.toISOString().slice(0, 10),
-  interaction_time: now.toTimeString().slice(0, 5),
+  interaction_date: '04/19/2025',
+  interaction_time: '07:36 PM',
   attendees: '',
   products_discussed: '',
   discussion_summary: '',
@@ -90,22 +88,17 @@ export default function App() {
     dispatch(fetchInitialData());
   }, [dispatch]);
 
-  const selectedHcp = useMemo(
-    () => hcps.find((hcp) => hcp.id === selectedHcpId),
-    [hcps, selectedHcpId],
-  );
-
   function handleFormChange(event) {
     const { name, value } = event.target;
     setForm((current) => ({ ...current, [name]: value }));
   }
 
   function handleHcpChange(event) {
-    const hcpId = Number(event.target.value);
-    const hcp = hcps.find((item) => item.id === hcpId);
-    dispatch(selectHcp(hcpId));
+    const hcpName = event.target.value;
+    const hcp = hcps.find((item) => item.name.toLowerCase() === hcpName.toLowerCase());
+    setForm((current) => ({ ...current, hcp_name: hcpName }));
     if (hcp) {
-      setForm((current) => ({ ...current, hcp_name: hcp.name }));
+      dispatch(selectHcp(hcp.id));
     }
   }
 
@@ -165,13 +158,20 @@ export default function App() {
             <div className="two-column">
               <label className="field">
                 <span>HCP Name</span>
-                <select value={selectedHcpId} onChange={handleHcpChange}>
+                <input
+                  list="hcp-options"
+                  name="hcp_name"
+                  value={form.hcp_name}
+                  onChange={handleHcpChange}
+                  placeholder="Search or select HCP..."
+                />
+                <datalist id="hcp-options">
                   {hcps.map((hcp) => (
-                    <option key={hcp.id} value={hcp.id}>
+                    <option key={hcp.id} value={hcp.name}>
                       {hcp.name}
                     </option>
                   ))}
-                </select>
+                </datalist>
               </label>
 
               <label className="field">
@@ -186,12 +186,12 @@ export default function App() {
 
               <label className="field">
                 <span>Date</span>
-                <input name="interaction_date" type="date" value={form.interaction_date} onChange={handleFormChange} />
+                <input name="interaction_date" value={form.interaction_date} onChange={handleFormChange} />
               </label>
 
               <label className="field">
                 <span>Time</span>
-                <input name="interaction_time" type="time" value={form.interaction_time} onChange={handleFormChange} />
+                <input name="interaction_time" value={form.interaction_time} onChange={handleFormChange} />
               </label>
             </div>
 
@@ -301,18 +301,10 @@ export default function App() {
         <aside className="assistant-panel">
           <header className="assistant-header">
             <div>
-              <h2>AI Assistant</h2>
+              <h2><span aria-hidden="true">🤖 </span>AI Assistant</h2>
               <p>Log Interaction details here via chat</p>
             </div>
-            <span className={`status ${status}`}>{status}</span>
           </header>
-
-          {selectedHcp && (
-            <div className="selected-hcp">
-              <strong>{selectedHcp.name}</strong>
-              <span>{selectedHcp.specialty} | {selectedHcp.institution}</span>
-            </div>
-          )}
 
           {error && <div className="error">{error}</div>}
 
@@ -332,7 +324,8 @@ export default function App() {
               rows="2"
             />
             <button className="primary log-button" type="submit" disabled={status === 'saving'}>
-              AI Log
+              <span>A</span>
+              <span>Log</span>
             </button>
           </form>
         </aside>
