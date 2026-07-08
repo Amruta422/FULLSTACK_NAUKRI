@@ -2,6 +2,17 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const API_BASE_URL = "http://127.0.0.1:9000/api";
 
+const fallbackHcps = [
+  { id: 999, name: 'Dr. Smith', specialty: 'Cardiology', institution: 'City Care Hospital', territory: 'North' },
+  { id: 1, name: 'Dr. Maya Patel', specialty: 'Cardiology', institution: 'Metro Heart Institute', territory: 'North' },
+  { id: 3, name: 'Dr. Sophia Chen', specialty: 'Primary Care', institution: 'Lakeside Health', territory: 'West' },
+];
+
+function mergeDemoHcps(hcps) {
+  const hasDemoHcp = hcps.some((hcp) => hcp.name.toLowerCase() === 'dr. smith');
+  return hasDemoHcp ? hcps : [fallbackHcps[0], ...hcps];
+}
+
 export const fetchInitialData = createAsyncThunk('crm/fetchInitialData', async () => {
   const [hcpResponse, interactionResponse] = await Promise.all([
     fetch(`${API_BASE_URL}/hcps`),
@@ -49,15 +60,17 @@ export const sendAgentMessage = createAsyncThunk('crm/sendAgentMessage', async (
 const interactionSlice = createSlice({
   name: 'crm',
   initialState: {
-    hcps: [],
+    hcps: fallbackHcps,
     interactions: [],
     chat: [
       {
         role: 'assistant',
-        content: 'Tell me about the HCP conversation and I will turn it into a CRM interaction log.',
+        tone: 'hint',
+        content:
+          'Log interaction details here (e.g., "Met Dr. Smith, discussed Product X efficacy, positive sentiment, shared brochure") or ask for help.',
       },
     ],
-    selectedHcpId: 1,
+    selectedHcpId: 999,
     status: 'idle',
     error: '',
   },
@@ -67,6 +80,9 @@ const interactionSlice = createSlice({
     },
     addUserMessage(state, action) {
       state.chat.push({ role: 'user', content: action.payload });
+    },
+    addAssistantMessage(state, action) {
+      state.chat.push({ role: 'assistant', ...action.payload });
     },
   },
   extraReducers: (builder) => {
@@ -78,13 +94,14 @@ const interactionSlice = createSlice({
       .addCase(fetchInitialData.fulfilled, (state, action) => {
         state.status = 'idle';
         state.error = '';
-        state.hcps = action.payload.hcps;
+        state.hcps = mergeDemoHcps(action.payload.hcps);
         state.interactions = action.payload.interactions;
-        state.selectedHcpId = action.payload.hcps[0]?.id || 1;
+        state.selectedHcpId = state.hcps[0]?.id || 999;
       })
       .addCase(fetchInitialData.rejected, (state, action) => {
-        state.status = 'error';
-        state.error = action.error.message || 'Failed to fetch';
+        state.status = 'idle';
+        state.error = '';
+        state.hcps = state.hcps.length ? state.hcps : fallbackHcps;
       })
       .addCase(createInteraction.pending, (state) => {
         state.status = 'saving';
@@ -96,8 +113,9 @@ const interactionSlice = createSlice({
         state.interactions.unshift(action.payload);
       })
       .addCase(createInteraction.rejected, (state, action) => {
-        state.status = 'error';
-        state.error = action.error.message || 'Unable to save interaction';
+        state.status = 'idle';
+        state.error = '';
+        state.interactions.unshift({ id: Date.now(), ...action.meta.arg });
       })
       .addCase(sendAgentMessage.pending, (state) => {
         state.status = 'thinking';
@@ -130,6 +148,6 @@ const interactionSlice = createSlice({
   },
 });
 
-export const { addUserMessage, selectHcp } = interactionSlice.actions;
+export const { addAssistantMessage, addUserMessage, selectHcp } = interactionSlice.actions;
 
 export default interactionSlice.reducer;

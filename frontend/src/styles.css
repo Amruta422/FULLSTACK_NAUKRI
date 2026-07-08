@@ -1,8 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  color: #14213d;
-  background: #f6f8fb;
+  color: #202124;
+  background: #f2f2f2;
   font-family: 'Inter', system-ui, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,147 +23,220 @@ textarea {
   font: inherit;
 }
 
-.shell {
+button {
+  cursor: pointer;
+}
+
+.task-shell {
   min-height: 100vh;
-  padding: 28px;
+  padding: 22px 26px 30px;
 }
 
-.workspace {
+.interaction-board {
   display: grid;
-  grid-template-columns: minmax(280px, 360px) 1fr;
-  gap: 24px;
-  max-width: 1240px;
-  margin: 0 auto;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 33vw);
+  gap: 26px;
+  align-items: start;
 }
 
-.context-panel,
-.log-panel,
+.interaction-form,
+.assistant-panel,
 .history {
   background: #ffffff;
-  border: 1px solid #dfe6ef;
+  border: 1px solid #e3e3e3;
   border-radius: 8px;
-  box-shadow: 0 18px 40px rgba(20, 33, 61, 0.08);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
-.context-panel {
-  padding: 24px;
-}
-
-.eyebrow {
-  margin: 0 0 8px;
-  color: #2f6fed;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.76rem;
+.interaction-form {
+  height: calc(100vh - 44px);
+  overflow: auto;
+  padding: 26px 28px;
 }
 
 h1,
 h2,
+h3,
 p {
   margin-top: 0;
 }
 
 h1 {
-  margin-bottom: 12px;
-  font-size: 2.2rem;
-  line-height: 1.05;
+  margin-bottom: 34px;
+  font-size: 2rem;
+  line-height: 1;
 }
 
 h2 {
+  margin-bottom: 8px;
+  color: #3f4a45;
+  font-size: 1.05rem;
+}
+
+h3 {
+  margin-bottom: 12px;
+  color: #3f4a45;
   font-size: 1rem;
 }
 
-.intro {
-  color: #536275;
-  line-height: 1.6;
+.form-section {
+  display: grid;
+  gap: 22px;
+  margin-bottom: 30px;
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 46px 20px;
 }
 
 .field {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 8px;
-  color: #334155;
-  font-size: 0.9rem;
-  font-weight: 700;
+  color: #3f4a45;
+  font-size: 0.95rem;
+  font-weight: 800;
 }
 
 .field input,
 .field select,
 .field textarea,
-.chat-input input {
+.assistant-input textarea,
+.plain-entry {
   width: 100%;
-  border: 1px solid #cfd8e3;
-  border-radius: 8px;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
   padding: 12px 14px;
-  color: #14213d;
+  color: #202124;
   background: #ffffff;
+  outline: none;
 }
 
-.field textarea {
+.field textarea,
+.assistant-input textarea {
   resize: vertical;
 }
 
-.hcp-summary {
-  display: grid;
-  gap: 6px;
-  margin: 22px 0;
-  padding: 16px;
-  border-radius: 8px;
-  background: #eef5ff;
+.field input:focus,
+.field select:focus,
+.field textarea:focus,
+.assistant-input textarea:focus {
+  border-color: #111111;
+  box-shadow: 0 0 0 1px #111111;
 }
 
-.hcp-summary span,
-.interaction-card span,
-.interaction-card small {
-  color: #64748b;
+.link-button {
+  width: fit-content;
+  border: 0;
+  padding: 0 0 0 4px;
+  color: #0b7a97;
+  background: transparent;
 }
 
-.agent-tools {
-  border-top: 1px solid #dfe6ef;
-  padding-top: 18px;
-}
-
-.agent-tools ul {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding-left: 18px;
-  color: #475569;
-}
-
-.log-panel {
-  padding: 22px;
-}
-
-.toolbar {
+.inline-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 18px;
+  margin-bottom: -8px;
+  border-top: 1px solid #eeeeee;
+  padding-top: 18px;
 }
 
-.segmented {
-  display: inline-flex;
-  padding: 4px;
-  border: 1px solid #cfd8e3;
-  border-radius: 8px;
-  background: #f8fafc;
+.secondary {
+  border: 1px solid #d8d8d8;
+  border-radius: 5px;
+  padding: 8px 14px;
+  color: #202124;
+  background: #ffffff;
 }
 
-.segmented button {
+.plain-entry {
   border: 0;
-  border-radius: 6px;
-  padding: 10px 14px;
-  background: transparent;
-  color: #475569;
-  cursor: pointer;
+  border-bottom: 1px solid #eeeeee;
+  border-radius: 0;
+  color: #5f6368;
 }
 
-.segmented .active {
+.sentiment-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  margin-bottom: 8px;
+}
+
+.sentiment-row label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #4f5853;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.sentiment-row input {
+  width: 18px;
+  height: 18px;
+  accent-color: #b139c8;
+}
+
+.primary {
+  border: 0;
+  border-radius: 8px;
   color: #ffffff;
-  background: #2f6fed;
+  background: #0b83ee;
+  font-weight: 800;
+}
+
+.primary:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.save-button {
+  justify-self: start;
+  padding: 12px 18px;
+}
+
+.assistant-panel {
+  position: sticky;
+  top: 22px;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  height: calc(100vh - 44px);
+  padding: 28px 26px 24px;
+}
+
+.assistant-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 20px;
+}
+
+.assistant-header h2 {
+  margin-bottom: 2px;
+  color: #1388e8;
+  font-size: 1.35rem;
+}
+
+.assistant-header p,
+.selected-hcp span,
+.interaction-card span,
+.interaction-card small,
+.empty {
+  color: #6f7672;
+}
+
+.selected-hcp {
+  display: grid;
+  gap: 2px;
+  margin: 14px 0 0;
+  color: #303934;
+  font-size: 0.88rem;
 }
 
 .status {
@@ -171,7 +244,7 @@ h2 {
   padding: 6px 10px;
   background: #eef2f7;
   color: #475569;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -184,7 +257,7 @@ h2 {
 }
 
 .error {
-  margin-bottom: 14px;
+  margin-top: 12px;
   padding: 12px;
   border: 1px solid #fecaca;
   border-radius: 8px;
@@ -192,78 +265,58 @@ h2 {
   background: #fff1f2;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.wide {
-  grid-column: 1 / -1;
-}
-
-.primary {
-  width: fit-content;
-  border: 0;
-  border-radius: 8px;
-  padding: 12px 18px;
-  color: #ffffff;
-  background: #123c7c;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.primary:disabled {
-  opacity: 0.7;
-  cursor: wait;
-}
-
-.chat-panel {
-  display: grid;
-  gap: 16px;
-  min-height: 520px;
-}
-
-.messages {
+.assistant-messages {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-height: 420px;
-  max-height: 560px;
+  gap: 20px;
+  min-height: 0;
   overflow: auto;
-  padding: 16px;
-  border: 1px solid #dfe6ef;
-  border-radius: 8px;
-  background: #f8fafc;
+  padding: 40px 0 22px;
 }
 
 .message {
-  max-width: 78%;
-  padding: 12px 14px;
+  max-width: 100%;
   border-radius: 8px;
-  line-height: 1.45;
+  padding: 18px 20px;
+  color: #202124;
+  line-height: 1.55;
 }
 
-.message.assistant {
-  align-self: flex-start;
-  background: #e9eff8;
+.message.hint {
+  background: #e3f7fb;
 }
 
 .message.user {
-  align-self: flex-end;
-  color: #ffffff;
-  background: #2f6fed;
+  border-left: 4px solid #0b83ee;
+  background: #eeeeee;
 }
 
-.chat-input {
+.message.success {
+  border: 1px solid #c6efce;
+  background: #e4ffe4;
+}
+
+.assistant-input {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 10px;
+  grid-template-columns: 1fr 92px;
+  gap: 14px;
+  border-top: 1px solid #eeeeee;
+  padding-top: 20px;
+}
+
+.assistant-input textarea {
+  min-height: 60px;
+  border-radius: 14px;
+}
+
+.log-button {
+  min-height: 70px;
+  border-radius: 24px;
+  line-height: 1.1;
 }
 
 .history {
-  max-width: 1240px;
-  margin: 24px auto 0;
+  margin-top: 24px;
   padding: 22px;
 }
 
@@ -292,33 +345,40 @@ h2 {
   line-height: 1.5;
 }
 
-.empty {
-  color: #64748b;
-}
-
-@media (max-width: 900px) {
-  .shell {
-    padding: 16px;
+@media (max-width: 980px) {
+  .task-shell {
+    padding: 14px;
   }
 
-  .workspace,
-  .form-grid,
+  .interaction-board,
+  .two-column,
   .history-grid {
     grid-template-columns: 1fr;
   }
 
-  .toolbar,
-  .chat-input {
-    align-items: stretch;
+  .interaction-form,
+  .assistant-panel {
+    height: auto;
+    max-height: none;
+  }
+
+  .assistant-panel {
+    position: static;
+  }
+}
+
+@media (max-width: 560px) {
+  .interaction-form,
+  .assistant-panel {
+    padding: 20px 16px;
+  }
+
+  .assistant-input {
     grid-template-columns: 1fr;
   }
 
-  .segmented {
-    width: 100%;
-  }
-
-  .segmented button,
-  .primary {
-    width: 100%;
+  .log-button {
+    min-height: 50px;
+    border-radius: 12px;
   }
 }
